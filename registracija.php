@@ -23,16 +23,16 @@ if (isset($_POST['submit'])) {
     if($ime=="" || $prezime=="" || $grad=="" || $ulica=="" || $username=="" || $password=="" || $broj_mobitela==""){
         echo "nije sve";
     }
-    $upit="SELECT korisnicko from korisnik WHERE korisnicko='$username'";
-    $rezultat=$baza->queryDB($upit);
-    if(pg_num_rows($rezultat)!=0){
-        echo "krovo emaillllllllllllllll";
+    else {
+        $upit = "SELECT korisnicko from korisnik WHERE korisnicko='$username'";
+        $rezultat = $baza->queryDB($upit);
+        if (pg_num_rows($rezultat) != 0) {
+            echo "krovo emaillllllllllllllll";
+        } else {
+            $unos_korisnika = "INSERT INTO korisnik VALUES(default, '$ime', '$prezime', '$username', '$password', 3, ROW('$grad', '$ulica', '$postanski_broj', '$broj_mobitela'))";
+            $baza->queryDB($unos_korisnika);
+        }
     }
-    else{
-        $unos_korisnika="INSERT INTO korisnik VALUES(default, '$ime', '$prezime', '$username', '$password', 3, ROW('$grad', '$ulica', '$postanski_broj', '$broj_mobitela'))";
-        $baza->queryDB($unos_korisnika);
-    }
-
 }
 ?>
 <html lang="en">
