@@ -1,3 +1,4 @@
+<?php include_once './izbornik.php';?>
 <!DOCTYPE html>
 <?php
 include_once './Baza.php';
@@ -118,6 +119,7 @@ if (isset($_POST['submit'])) {
 </div>
 </body>
 <script type="text/javascript">
+
     function checkPass()
     {
         var pass = document.getElementById('password');
