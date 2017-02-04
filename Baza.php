@@ -9,7 +9,7 @@
 class Baza
 {
     private $db_host = "localhost";
-    private $db_name = "TBP";
+    private $db_name = "tbp";
     private $db_username = "postgres";
     private $db_password = "user";
 

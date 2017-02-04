@@ -13,45 +13,45 @@ $baza = new Baza();
 
 $username="";
 $password="";
-$div_class='"alert alert-danger"';
-$role='"alert"';
-$span_class='"glyphicon glyphicon-exclamation-sign"';
-$aria_hiden='"true"';
-$spann_class1='"sr-only"';
 $greska="";
+$row="";
 $provjera=false;
 if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $password = $_POST['password'];
     if ($username == "" || $password == "") {
-        $provjera=true;
-        $greska="Potrebno je upisati sve podatke";
-    }
-    else {
-        $upit = "SELECT * from korisnik WHERE korisnicko='$username' and lozinka='$password'";
-        $rezultat = $baza->queryDB($upit);
-        if (pg_num_rows($rezultat) != 0) {
-            $row = pg_fetch_array($rezultat);
-            $_SESSION["ime"] = $row["korisnicko"];
-            $_SESSION["id"] = $row["id"];
-            $upit_administrator = "SELECT id from administrator WHERE id='$row[id]'";
-            $upit_trener = "SELECT id from trener WHERE id='$row[id]'";
-            $rezultat_adminitrator = $baza->queryDB($upit_administrator);
-            if (pg_num_rows($rezultat_adminitrator) != 0) {
-                $_SESSION["tip_korisnika"] = "administrator";
+        $provjera = true;
+        $greska = " Potrebno je upisati sve podatke";
+    } else {
+        $upit = "SELECT * from obicni_korisnik WHERE korisnicko='$username' and lozinka='$password'";
+        $upit_administrator = "SELECT * from administrator WHERE korisnicko='$username' and lozinka='$password'";
+        $upit_trener = "SELECT * from trener WHERE korisnicko='$username' and lozinka='$password'";
+        $rezultat_adminitrator = $baza->queryDB($upit_administrator);
+        if (pg_num_rows($rezultat_adminitrator) != 0) {
+            $row = pg_fetch_array($rezultat_adminitrator);
+            $_SESSION["vrsta_korisnika"]="Administrator";
+        } else {
+            $rezultat_trener = $baza->queryDB($upit_trener);
+            if (pg_num_rows($rezultat_trener) != 0) {
+                $row = pg_fetch_array($rezultat_trener);
+                $_SESSION["vrsta_korisnika"]="Trener";
             } else {
-                $rezultat_trener = $baza->queryDB($upit_trener);
-                if (pg_num_rows($rezultat_trener) != 0) {
-                    $_SESSION["tip_korisnika"] = "trener";
-                } else {
-                    $_SESSION["tip_korisnika"] = "korisnik";
+                $rezultat = $baza->queryDB($upit);
+                if (pg_num_rows($rezultat) != 0) {
+                    $row = pg_fetch_array($rezultat);
+                    $_SESSION["vrsta_korisnika"]="Obicni_korisnik";
+                }
+                else{
+                    $provjera = true;
+                    $greska = " Korisnik ne postoji u bazi ili ste unjeli krivu lozinku za korisnika";
                 }
             }
-            header('Location: index.php');
-        } else {
-            $provjera = true;
-            $greska = "Korisnik ne postoji u bazi ili ste unjeli krivu lozinku za korisnika";
+        }
     }
+    if($row!=""){
+        $_SESSION["ime"] = $row["korisnicko"];
+        $_SESSION["id"] = $row["id"];
+        header('Location: index.php');
     }
 }
 
@@ -74,17 +74,14 @@ if (isset($_POST['submit'])) {
 </head>
 <body>
 <div class="container">
-    <?php
-    if($provjera==true) {
-        $ispis = "<div class=" . $div_class . "role=" . $role . ">";
-        $ispis .= "<span class=" . $span_class . "aria-hidden=" . $aria_hiden . "></span>";
-        $ispis .= "<span class=" . $spann_class1 . "></span>";
-        $ispis .= $greska;
-        $ispis .= "</div>";
-        echo $ispis;
-    }
-?>
     <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" class="form-horizontal" data-toggle="validator" name="registracija">
+        <?php if($provjera==true){?>
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                <?php echo $greska ?>
+            </div>
+        <?php }?>
         <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">*Username</label>
             <div class="col-sm-10">
