@@ -23,15 +23,21 @@ if (isset($_POST['submit'])) {
     $username=$_POST['username'];
     $password=$_POST['password'];
     $broj_mobitela=$_POST['broj_mobitela'];
-    if($ime=="" || $prezime=="" || $grad=="" || $ulica=="" || $username=="" || $password=="" || $broj_mobitela==""){
-        echo "nije sve";
+    if($ime=="" || $prezime=="" || $grad=="" || $ulica=="" || $username=="" || $password=="" || $broj_mobitela=="" || empty($_POST['inlineRadioOptions'])){
+        $provjera=true;
+        $ispisAlerta="Niste upisali sve podatke";
     }
     else {
         $upit = "SELECT korisnicko from korisnik WHERE korisnicko='$username'";
+        $inlineRadioOptions=$_POST['inlineRadioOptions'];
         $rezultat = $baza->queryDB($upit);
         if (pg_num_rows($rezultat) != 0) {
+            $provjera=true;
+            $ispisAlerta="Korisničko ime već postoji";
         } else {
+            $unos_korisnika = "INSERT INTO obicni_korisnik VALUES('$ime', '$prezime', '$username', '$password', ROW('$grad', '$ulica', '$postanski_broj', '$broj_mobitela'), default, 0,'$inlineRadioOptions')";
             $baza->queryDB($unos_korisnika);
+            header('Location: index.php');
         }
     }
 }
@@ -52,6 +58,13 @@ if (isset($_POST['submit'])) {
 <body>
 <div class="container">
     <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="POST" class="form-horizontal" data-toggle="validator" name="registracija">
+        <?php if($provjera==true){?>
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                <?php echo $ispisAlerta ?>
+            </div>
+        <?php }?>
         <div class="form-group">
             <label for="email"  class="col-sm-2 control-label">*Ime</label>
             <div class="col-sm-10">
@@ -107,6 +120,12 @@ if (isset($_POST['submit'])) {
                 <input type="text" id="password1" class="form-control" name="broj_mobitela" placeholder="Broj mobitela" onkeyup="validatephone(this);">
             </div>
         </div>
+        <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio1" value="M"> M
+        </label>
+        <label class="radio-inline">
+            <input type="radio" name="inlineRadioOptions" id="inlineRadio2"  value="Z"> Z
+        </label>
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <input type="submit" name="submit" value="Submit" class="btn btn-primary btn-lg" id="submit" />
