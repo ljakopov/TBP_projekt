@@ -18,34 +18,38 @@
 </head>
 <body>
 <div class="container">
+    <ul class="nav nav-pills">
+        <li role="presentation" class="active"><a href="#">Home</a></li>
+        <li role="presentation"><a href="#">Profile</a></li>
+        <li role="presentation"><a href="#">Messages</a></li>
+    </ul>
     <table class="table table-hover">
         <tr>
-            <th>ID</th>
             <th>Ime</th>
             <th>Prezime</th>
             <th>Username</th>
-            <th>Vrsta Korisnika</th>
             <th>Grad</th>
             <th>Ulica</th>
             <th>Poštanski broj</th>
             <th>Broj mobitela</th>
+            <th>Radnje</th>
         </tr>
 <?php
 include_once './Baza.php';
 $baza = new Baza();
-$upit="SELECT id, ime, prezime, korisnicko, vrsta_korisnika_id, (informacije).grad, (informacije).ulica, (informacije).postanski_broj, (informacije).broj_mobitela FROM korisnik ORDER BY id ASC";
+$upit="SELECT  ime, prezime, korisnicko, (informacije).grad, (informacije).ulica, (informacije).postanski_broj, (informacije).broj_mobitela FROM korisnik";
 $rezultat=$baza->queryDB($upit);
 while ($row = pg_fetch_array($rezultat)){
+    $korisnicko=$row["korisnicko"];
     $ispis="<tr>";
-    $ispis.="<td>".$row["id"]."</td>";
     $ispis.="<td>".$row["ime"]."</td>";
     $ispis.="<td>".$row["prezime"]."</td>";
     $ispis.="<td>".$row["korisnicko"]."</td>";
-    $ispis.="<td>".$row["vrsta_korisnika_id"]."</td>";
     $ispis.="<td>".$row["grad"]."</td>";
     $ispis.="<td>".$row["ulica"]."</td>";
     $ispis.="<td>".$row["postanski_broj"]."</td>";
     $ispis.="<td>".$row["broj_mobitela"]."</td>";
+    $ispis.="<td><a href='opsirnije_o_korisnicima.php?username=$korisnicko' class='btn btn-danger'>Opsirnije</a></td>";
     $ispis.="</tr>";
     echo $ispis;
 }
