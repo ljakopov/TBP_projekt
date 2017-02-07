@@ -21,12 +21,16 @@ if(!isset($_SESSION["id"])){
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<?php include_once './izbornik.php'; ?>
+<?php include './izbornik.php'; ?>
 <div class="container">
     <table class="table table-hover">
         <tr>
             <th>Ime grupe</th>
-            <th>Ukupno broj</th>
+            <th>Mjesto održavanje</th>
+            <th>Prvi trening</th>
+            <th>Vrijeme</th>
+            <th>Grupa sadrži</th>
+            <th>Ukupna veličina grupe</th>
             <th>Akcije</th>
         </tr>
         <?php
@@ -37,12 +41,16 @@ if(!isset($_SESSION["id"])){
         if(isset($_GET["naziv"])) {
             $naziv_grupe = $_GET["naziv"];
             $id_korisnika = $_SESSION["id"];
-            $upit = "SELECT grupa.naziv, grupa.id,count(korisnik_grupa.grupa_id) FROM grupa LEFT JOIN korisnik_grupa ON korisnik_grupa.grupa_id=grupa.id WHERE grupa.sport='$naziv_grupe' AND grupa.id NOT IN(SELECT grupa.id FROM grupa, korisnik_grupa WHERE grupa.id=korisnik_grupa.grupa_id AND korisnik_grupa.korisnik_id='$id_korisnika' AND grupa.sport='$naziv_grupe')GROUP BY grupa.naziv,grupa.id";
+            $upit = "SELECT grupa.naziv, grupa.id,(grupa.odrzavanje).vrijeme,(grupa.odrzavanje).mjesto,(grupa.odrzavanje).datum,grupa.broj_mjesta,count(korisnik_grupa.grupa_id) FROM grupa LEFT JOIN korisnik_grupa ON korisnik_grupa.grupa_id=grupa.id WHERE grupa.sport='$naziv_grupe' AND grupa.id NOT IN(SELECT grupa.id FROM grupa, korisnik_grupa WHERE grupa.id=korisnik_grupa.grupa_id AND korisnik_grupa.korisnik_id='$id_korisnika' AND grupa.sport='$naziv_grupe')GROUP BY grupa.naziv,grupa.id";
             $rezultat = $baza->queryDB($upit);
             while ($row = pg_fetch_array($rezultat)) {
                 $id = $row["id"];
                 $ispis = "<tr>";
                 $ispis .= "<td>" . $row["naziv"] . "</td>";
+                $ispis .= "<td>" . $row["mjesto"] . "</td>";
+                $ispis .= "<td>" . $row["datum"] . "</td>";
+                $ispis .= "<td>" . $row["vrijeme"] . "</td>";
+                $ispis .= "<td>" . $row["broj_mjesta"] . "</td>";
                 $ispis .= "<td>" . $row["count"] . "</td>";
                 $ispis .= "<td><a href='dodaj_u_grupu.php?id=$id' class='btn btn-danger'>Opsirnije</a></td>";
                 $ispis .= "</tr>";

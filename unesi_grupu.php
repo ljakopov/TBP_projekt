@@ -17,20 +17,22 @@ $mjesto="";
 $vrijemeDatum="";
 $trener="";
 $sport="";
+$broj="";
 $provjera=false;
 if(isset($_POST["submit"])){
     $naziv=$_POST["naziv"];
     $mjesto=$_POST["mjesto"];
     $trener=$_POST["trener"];
+    $broj=$_POST["broj"];
     $sport=$_POST["sport"];
     $vrijemeDatum=$_POST["vrijeme"];
-    if($naziv=="" || $mjesto=="" || $trener=="" || $sport=="" || $vrijemeDatum==""){
+    if($naziv=="" || $mjesto=="" || $trener=="" || $sport=="" || $vrijemeDatum=="" || $broj==0){
         $provjera=true;
         $ispisAlerta="Niste upisali sve podatke";
     }
     else{
         $pieces = explode(" ", $vrijemeDatum);
-        $upit="INSERT INTO grupa VALUES(default, '$naziv', $trener, $sport, ROW('$mjesto','$pieces[1]','$pieces[0]'))";
+        $upit="INSERT INTO grupa VALUES(default, '$naziv', $trener, $sport, ROW('$mjesto','$pieces[1]','$pieces[0]'),'$broj')";
         $baza->queryDB($upit);
     }
 
@@ -70,6 +72,12 @@ if(isset($_POST["submit"])){
             <label for="inputPassword3" class="col-sm-2 control-label">Mjesto</label>
             <div class="col-sm-10">
                 <input type="text" id="password1" class="form-control" name="mjesto" placeholder="Mjesto">
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="inputPassword3" class="col-sm-2 control-label">Broj mjesta</label>
+            <div class="col-sm-10">
+                <input type="text" id="password1" class="form-control" name="broj" placeholder="Broj ljudi koje grupa prima">
             </div>
         </div>
         <div class="form-group">
