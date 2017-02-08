@@ -45,7 +45,7 @@ if(isset($_GET["id"])){
             $ispis.="<td>".$row["naziv"]."</td>";
             $ispis.="<td>".$row["broj_mjesta"]."</td>";
             $ispis.="<td>".$row["count"]."</td>";
-            $ispis.="<td><a href='grupe_za_prijavu.php?naziv=$id' class='btn btn-danger'>Pogledaj grupu</a></td>";
+            $ispis.="<td><a href='prikaz_grupe.php?id=$id' class='btn btn-danger'>Pogledaj grupu</a></td>";
             $ispis.="</tr>";
             echo $ispis;
         }
