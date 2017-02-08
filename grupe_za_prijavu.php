@@ -52,7 +52,7 @@ if(!isset($_SESSION["id"])){
                 $ispis .= "<td>" . $row["vrijeme"] . "</td>";
                 $ispis .= "<td>" . $row["broj_mjesta"] . "</td>";
                 $ispis .= "<td>" . $row["count"] . "</td>";
-                $ispis .= "<td><a href='dodaj_u_grupu.php?id=$id' class='btn btn-danger'>Opsirnije</a></td>";
+                $ispis .= "<td><a href='dodaj_u_grupu.php?id=$id' class='btn btn-danger'>Dodaj me</a></td>";
                 $ispis .= "</tr>";
                 echo $ispis;
             }
