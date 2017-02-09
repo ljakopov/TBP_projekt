@@ -9,6 +9,7 @@ session_start();
 include_once './izbornik.php';
 include_once './Baza.php';
 $baza = new Baza();
+$ispis_slike="";
 if(isset($_GET["id"])){
     $id=$_GET["id"];
     $upit="SELECT grupa.naziv,trener.korisnicko,trener.ime,trener.prezime,grupa.broj_mjesta,(grupa.odrzavanje).mjesto, (grupa.odrzavanje).vrijeme,(grupa.odrzavanje).datum,sport.naziv,count(korisnik_grupa.grupa_id) FROM grupa LEFT JOIN korisnik_grupa ON korisnik_grupa.grupa_id=grupa.id  LEFT JOIN trener ON grupa.trener=trener.id  LEFT JOIN sport on sport.id=grupa.sport WHERE grupa.id='$id' GROUP BY grupa.naziv,grupa.id, trener.korisnicko,trener.ime,trener.prezime,sport.naziv";
@@ -51,6 +52,47 @@ if(isset($_GET["id"])){
     <h3>Ukupni broj mjesta: <?php echo $ukupni_broj?></h3>
     <h3>Popunjena mjesta u grupi: <?php echo $popunjeni_broj?></h3>
 
+    <?php $id_grupe=$_GET["id"]; if($_SESSION["vrsta_korisnika"]=="Trener"){?>
+    <a href="upload_materijala.php?id=<?php echo $id_grupe ?>" class="btn btn-danger">Dodaj nove materijale</a><?php }?>
+    <h2>Materijali grupe </h2>
+    <h4>Slike</h4>
+    <?php
+    $upit_slike="SELECT * FROM materijal WHERE id_vrsta=1 AND grupa_id='$id'";
+    $rezultat_slike = $baza->queryDB($upit_slike);
+    while ($row_slike = pg_fetch_array($rezultat_slike)) {
+        $putanja_slike=$row_slike["putanja"];
+        $ispis_slike = "<li>";
+        $ispis_slike="<ul>"."<a href='$putanja_slike' target='_blank'>view file</a></ul>";
+        $ispis_slike.= "</li>";
+        echo $ispis_slike;
+    }
+    ?>
+    <h4>Dokumenti</h4>
+    <?php
+    $upit_dokumenti="SELECT * FROM materijal WHERE id_vrsta=2 AND grupa_id='$id'";
+    $rezultat_dokumenti = $baza->queryDB($upit_dokumenti);
+    while ($row_dokumenti = pg_fetch_array($rezultat_dokumenti)) {
+        $putanja_dokumenta = $row_dokumenti["putanja"];
+        $ispis_dokumenta = "<li>";
+        $ispis_dokumenta = "<ul>" . "<a href='$putanja_dokumenta' target='_blank'>view file</a></ul>";
+        $ispis_dokumenta .= "</li>";
+        echo $ispis_dokumenta;
+    }
+    ?>
+
+    <h4>Video</h4>
+    <?php
+    $upit_videi="SELECT * FROM materijal WHERE id_vrsta=3 AND grupa_id='$id'";
+    $rezultat_videi = $baza->queryDB($upit_videi);
+    while ($row_videa = pg_fetch_array($rezultat_dokumenti)) {
+        $putanja_videa = $row_videa["putanja"];
+        $ispis_videa = "<li>";
+        $ispis_videa = "<ul>" . "<a href='$putanja_videa' target='_blank'>view file</a></ul>";
+        $ispis_videa .= "</li>";
+        echo $ispis_videa;
+    }
+    ?>
+
     <?php if($_SESSION["vrsta_korisnika"]=="Trener"){?>
     <h2>Članovi grupe: </h2>
     <table class="table table-hover">
@@ -71,7 +113,9 @@ if(isset($_GET["id"])){
                 $ispis .= "</tr>";
                 echo $ispis;
             }
-        }?>
+        }
+        ?>
+
 </div>
 </body>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
