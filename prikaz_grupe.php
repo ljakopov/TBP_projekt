@@ -44,6 +44,7 @@ if(isset($_GET["id"])){
 </head>
 <body>
 <div class="container">
+    <div class="jumbotron">
     <h1>Naziv grupe: <?php echo $naziv ?></h1>
     <h3>Ime i prezime trenera: <?php echo $ime_trenera."\n".$prezime_trenera?></h3>
     <h3>Sport: <?php echo $sport?></h3>
@@ -51,9 +52,13 @@ if(isset($_GET["id"])){
     <h3>Vrijeme održavanja: <?php echo $vrijeme?></h3>
     <h3>Ukupni broj mjesta: <?php echo $ukupni_broj?></h3>
     <h3>Popunjena mjesta u grupi: <?php echo $popunjeni_broj?></h3>
+    </div>
 
+    <a href="forum_grupe.php?id=<?php echo $id ?>" class="btn btn-danger">Pogledaj forum</a>
     <?php $id_grupe=$_GET["id"]; if($_SESSION["vrsta_korisnika"]=="Trener"){?>
-    <a href="upload_materijala.php?id=<?php echo $id_grupe ?>" class="btn btn-danger">Dodaj nove materijale</a><?php }?>
+    <a href="upload_materijala.php?id=<?php echo $id_grupe ?>" class="btn btn-danger">Dodaj nove materijale</a><?php ?>
+    <a href="novi_post.php?id=<?php echo $id_grupe ?>" class="btn btn-danger">Dodaj novi post</a><?php }?>
+    <div class="jumbotron">
     <h2>Materijali grupe </h2>
     <h4>Slike</h4>
     <?php
@@ -92,7 +97,8 @@ if(isset($_GET["id"])){
         echo $ispis_videa;
     }
     ?>
-
+    </div>
+    <div class="jumbotron">
     <?php if($_SESSION["vrsta_korisnika"]=="Trener"){?>
     <h2>Članovi grupe: </h2>
     <table class="table table-hover">
@@ -115,6 +121,8 @@ if(isset($_GET["id"])){
             }
         }
         ?>
+    </table>
+    </div>
 
 </div>
 </body>
