@@ -5,10 +5,10 @@
  * Date: 25.1.2017.
  * Time: 2:18
  */
+session_start();
 include_once './izbornik.php';?>
 <!DOCTYPE html>
 <?php
-session_start();
 include_once './Baza.php';
 $baza = new Baza();
 
@@ -19,7 +19,7 @@ if(!isset($_SESSION["ime"])){
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Login</title>
+    <title>Grupe po sportovima</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">

@@ -42,12 +42,23 @@ if (isset($_POST['submit'])) {
     else if($_POST["vrsta_korisnika"]=="Trener"){
         $upit_trener = "UPDATE trener SET ime='$ime', prezime='$prezime',korisnicko='$username',informacije=ROW('$grad', '$ulica', '$postanski_broj', '$broj_mobitela') WHERE korisnicko='$username'";
         $rezultat=$baza->queryDB($upit_trener);
-        header('Location: ispis_svih_korisnika.php');
+        if($_SESSION["vrsta_korisnika"]=="Administrator"){
+            header('Location: ispis_svih_korisnika.php');
+        }
+        else{
+            header('Location: index.php');
+        }
+
     }
     else{
         $spol=$_POST['inlineRadioOptions'];
         $upit = "UPDATE obicni_korisnik SET ime='$ime', prezime='$prezime',korisnicko='$username',informacije=ROW('$grad', '$ulica', '$postanski_broj', '$broj_mobitela'), spol='$spol' WHERE korisnicko='$username'";
         $rezultat=$baza->queryDB($upit);
-        header('Location: ispis_svih_korisnika.php');
+        if($_SESSION["vrsta_korisnika"]=="Administrator"){
+            header('Location: ispis_svih_korisnika.php');
+        }
+        else{
+            header('Location: index.php');
+        }
     }
 }

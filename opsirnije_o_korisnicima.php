@@ -8,7 +8,6 @@
 include_once './Baza.php';
 session_start();
 $baza = new Baza();
-$username="";
 $id=0;
 $ime="";
 $prezime="";
@@ -22,10 +21,11 @@ $radno_vrijeme="";
 $cijena="";
 $radioButton="";
 $korisnicko="";
+include_once './izbornik.php';
 if(isset($_GET['username'])) {
     $username = $_GET['username'];
     $upit = "SELECT id,ime, prezime, korisnicko, (informacije).grad, (informacije).ulica, (informacije).postanski_broj, (informacije).broj_mobitela,spol,broj_grupa from obicni_korisnik WHERE korisnicko='$username'";
-    $upit_administrator = "SELECT * from administrator WHERE korisnicko='$username'";
+    $upit_administrator = "SELECT id,ime, prezime, korisnicko, (informacije).grad, (informacije).ulica, (informacije).postanski_broj, (informacije).broj_mobitela,radno_vrijeme,cijena from administrator WHERE korisnicko='$username'";
     $upit_trener = "SELECT id,ime, prezime, korisnicko, (informacije).grad, (informacije).ulica, (informacije).postanski_broj, (informacije).broj_mobitela,broj_grupa from trener WHERE korisnicko='$username'";
     $rezultat_adminitrator = $baza->queryDB($upit_administrator);
     if (pg_num_rows($rezultat_adminitrator) != 0) {
@@ -91,31 +91,31 @@ if(isset($_GET['username'])) {
         <div class="form-group">
             <label for="email"  class="col-sm-2 control-label">*Ime</label>
             <div class="col-sm-10">
-                <input type="text" id="email" class="form-control"  placeholder="Ime" value="<?php echo $ime ?>" <?php if($_SESSION["ime"]!=$korisnicko){?>disabled <?php }?> name="ime">
+                <input type="text" id="email" class="form-control"  placeholder="Ime" value="<?php echo $ime ?>" <?php if($_SESSION["ime"]!=$username){?>disabled <?php }?> name="ime">
             </div>
         </div>
         <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">*Prezime</label>
             <div class="col-sm-10">
-                <input type="text" id="password1" class="form-control" name="prezime" value="<?php echo $prezime ?>" <?php if($_SESSION["ime"]!=$korisnicko){?>disabled <?php }?> placeholder="Prezime">
+                <input type="text" id="password1" class="form-control" name="prezime" value="<?php echo $prezime ?>" <?php if($_SESSION["ime"]!=$username){?>disabled <?php }?> placeholder="Prezime">
             </div>
         </div>
         <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">*Grad</label>
             <div class="col-sm-10">
-                <input type="text" id="password1" class="form-control" name="grad" value="<?php echo $grad ?>" <?php if($_SESSION["ime"]!=$korisnicko){?>disabled <?php }?> placeholder="Grad">
+                <input type="text" id="password1" class="form-control" name="grad" value="<?php echo $grad ?>" <?php if($_SESSION["ime"]!=$username){?>disabled <?php }?> placeholder="Grad">
             </div>
         </div>
         <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">*Ulica</label>
             <div class="col-sm-10">
-                <input type="text" id="password1" class="form-control" name="ulica" value="<?php echo $ulica ?>" <?php if($_SESSION["ime"]!=$korisnicko){?>disabled <?php }?> placeholder="Ulica">
+                <input type="text" id="password1" class="form-control" name="ulica" value="<?php echo $ulica ?>" <?php if($_SESSION["ime"]!=$username){?>disabled <?php }?> placeholder="Ulica">
             </div>
         </div>
         <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">*Poštanski broj</label>
             <div class="col-sm-10">
-                <input type="text" id="password1" class="form-control" name="postanski_broj" value="<?php echo $postanski_broj ?>" <?php if($_SESSION["ime"]!=$korisnicko){?>disabled <?php }?> placeholder="Poštanski broj">
+                <input type="text" id="password1" class="form-control" name="postanski_broj" value="<?php echo $postanski_broj ?>" <?php if($_SESSION["ime"]!=$username){?>disabled <?php }?> placeholder="Poštanski broj">
             </div>
         </div>
         <div class="form-group">
@@ -124,6 +124,7 @@ if(isset($_GET['username'])) {
                 <input type="text" id="password1" class="form-control" name="username" value="<?php echo $username ?>"  placeholder="Username" readonly>
             </div>
         </div>
+        <?php if($radioButton=="Trener"){?>
         <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">Broj grupa</label>
             <div class="col-sm-10">
@@ -131,10 +132,11 @@ if(isset($_GET['username'])) {
                 <span id="confirmMessage" class="confirmMessage"></span>
             </div>
         </div>
+        <?php }?>
         <div class="form-group">
             <label for="inputPassword3" class="col-sm-2 control-label">*Broj mobitela</label>
             <div class="col-sm-10">
-                <input type="text" id="password1" class="form-control" name="broj_mobitela" <?php if($_SESSION["ime"]!=$korisnicko){?>disabled <?php }?> value="<?php echo $broj_mobitela ?>");">
+                <input type="text" id="password1" class="form-control" name="broj_mobitela" <?php if($_SESSION["ime"]!=$username){?>disabled <?php }?> value="<?php echo $broj_mobitela ?>");">
             </div>
         </div>
         <?php if($radioButton=="Administrator"){?>

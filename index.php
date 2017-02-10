@@ -22,10 +22,12 @@ $baza = new Baza();
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
-<?php include_once './izbornik.php'; ?>
+<?php include_once './izbornik.php';
+?>
 <div class="container">
     <h1>Web stranica za sport</h1>
     <h5>Omogućujemo bavljenje različitim sportovima od nogometa do američkog nogometa. Za prikaz sadržaja potrebno se ulogirati na stranicu.</h5>
+    <?php if(isset($_SESSION["id"]) && $_SESSION["vrsta_korisnika"]=="Obicni_korisnik"){?>
     <table class="table table-hover">
         <tr>
             <th>Sport</th>
@@ -45,6 +47,7 @@ $baza = new Baza();
         ?>
         </tbody>
     </table>
+    <?php }?>
 </div>
 
 </body>

@@ -12,8 +12,6 @@ session_start();
     include_once './Baza.php';
     $baza = new Baza();
     $id_korisnika = $_SESSION["id"];
-
-
 ?>
 <html lang="en">
 <head>
@@ -49,7 +47,7 @@ session_start();
                 echo $ispis;
             }
         }
-        else if($_SESSION["vrsta_korisnika"]="Obicni_korisnik"){?>
+        else if($_SESSION["vrsta_korisnika"]=="Obicni_korisnik"){?>
         <tr>
             <th>Ime grupe</th>
             <th>Mjesto</th>
